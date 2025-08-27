@@ -1,0 +1,41 @@
+int numUniqueEmails(char** emails, int emailsSize) {
+    char unique[100][105];
+    int uniqueCount = 0;
+    char normalized[105];
+    for (int i = 0; i < emailsSize; ++i) {
+        int j = 0, k = 0;
+        bool plus_found = false;
+        while (emails[i][j] && emails[i][j] != '@') {
+            if (plus_found) {
+                j++;
+                continue;
+            }
+            if (emails[i][j] == '.') {
+                j++;
+                continue;
+            }
+            if (emails[i][j] == '+') {
+                plus_found = true;
+                j++;
+                continue;
+            }
+            normalized[k++] = emails[i][j++];
+        }
+        while (emails[i][j]) {
+            normalized[k++] = emails[i][j++];
+        }
+        normalized[k] = '\0';
+
+        bool exists = false;
+        for (int x = 0; x < uniqueCount; ++x) {
+            if (strcmp(normalized, unique[x]) == 0) {
+                exists = true;
+                break;
+            }
+        }
+        if (!exists) {
+            strcpy(unique[uniqueCount++], normalized);
+        }
+    }
+    return uniqueCount;
+}
